@@ -1,5 +1,7 @@
 package com.diagrammingtool.app.service;
 
-public interface UserRegistrationService {
+import com.diagrammingtool.app.model.UserRegistration;
 
+public interface UserRegistrationService {
+     public UserRegistration CreateNewUser(UserRegistration user);
 }
