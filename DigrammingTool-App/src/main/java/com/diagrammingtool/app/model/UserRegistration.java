@@ -1,16 +1,16 @@
 package com.diagrammingtool.app.model;
 
-public class UserRegistartion {
+public class UserRegistration {
   private String userName;
   private String userEmail;
   private String password;
   
-  public UserRegistartion()
+  public UserRegistration()
   {
 	  
   }
 
-public UserRegistartion(String userName, String userEmail, String password) {
+public UserRegistration(String userName, String userEmail, String password) {
 	super();
 
 	this.userName = userName;
