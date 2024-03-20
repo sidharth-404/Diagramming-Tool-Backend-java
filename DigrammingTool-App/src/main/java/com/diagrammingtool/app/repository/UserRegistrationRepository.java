@@ -5,8 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import com.diagrammingtool.app.model.UserRegistration;
 
-
 @Repository
-public interface UserRegistrationRepository extends JpaRepository<UserRegistration,Integer> {
+public interface UserRegistrationRepository extends JpaRepository<UserRegistration,Long> {
 
 }
