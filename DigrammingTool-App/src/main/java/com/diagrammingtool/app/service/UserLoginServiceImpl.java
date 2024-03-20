@@ -1,23 +1,34 @@
 package com.diagrammingtool.app.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.diagrammingtool.app.model.UserLogin;
-import com.diagrammingtool.app.repository.UserLoginRepository;
+import com.diagrammingtool.app.model.UserRegistration;
+import com.diagrammingtool.app.repository.UserRegistrationRepository;
 
+
+@Service
 public class UserLoginServiceImpl implements UserLoginService{
 	 @Autowired
-	    private UserLoginRepository userLoginRepository;
+	 private UserRegistrationRepository userDetails;
+	 
+	 @Autowired
+	 private PasswordEncryption passwordEncrypt;
 
 	    @Override
-	    public UserLogin loginUser(String userEmail, String password) {
-	        UserLogin user = userLoginRepository.findByUserEmail(userEmail);
-
-	        if (user != null && user.getPassword().equals(password)) {
-	            return user;
-	        } else {
-	            return null;
+	    public UserRegistration loginUser(String userEmail, String password) {
+	        UserRegistration user = userDetails.findByUserEmail(userEmail);
+	        
+	        if(user== null)
+	        {
+	        	throw new IllegalArgumentException("user not found");
 	        }
+	        if(passwordEncrypt.verifyPassword(password,user.getPassword())==false) {
+	        	throw new IllegalArgumentException("invalid password");
+	        }
+
+	        return user;
 	    }
 
 }

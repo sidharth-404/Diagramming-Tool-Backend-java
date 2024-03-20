@@ -1,8 +1,9 @@
 package com.diagrammingtool.app.service;
 
-import com.diagrammingtool.app.model.UserLogin;
+
+import com.diagrammingtool.app.model.UserRegistration;
 
 public interface UserLoginService {
-	UserLogin loginUser(String userEmail, String password);
+UserRegistration loginUser(String userEmail, String password);
 
 }
