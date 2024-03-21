@@ -30,7 +30,7 @@ public class UserRegistrationController {
 	
 
 	@PostMapping("/addUser")
-	public ResponseEntity<?> addUser(@Valid @RequestBody UserRegistration user, BindingResult result) {
+	public ResponseEntity<?> AddUser(@Valid @RequestBody UserRegistration user, BindingResult result) {
 	    if (result.hasErrors()) {
 	        List<String> errors = result.getFieldErrors().stream()
 	                .map(err -> err.getDefaultMessage())

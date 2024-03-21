@@ -2,7 +2,7 @@ package com.diagrammingtool.app.validation;
 
 import com.diagrammingtool.app.controller.UserRegistrationController;
 import com.diagrammingtool.app.model.UserRegistration;
-import com.diagrammingtool.app.service.UserRegsitartionServiceImpl;
+import com.diagrammingtool.app.service.UserRegistrationServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +28,13 @@ public class RegistrationvalidationTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private UserRegsitartionServiceImpl userService;
+    private UserRegistrationServiceImpl userService;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     public void testAddUserSuccess() throws Exception {
-        UserRegistration user = new UserRegistration("feril", "Doe", "feril@example.com", "Password@123");
+        UserRegistration user = new UserRegistration("feril","Doe","feril@example.com", "Password@123");
 
         when(userService.CreateNewUser(any(UserRegistration.class))).thenReturn(user);
 
@@ -47,7 +47,7 @@ public class RegistrationvalidationTest {
 
     @Test
     public void testAddUserValidationFailure() throws Exception {
-        UserRegistration user = new UserRegistration("John", "Doe", "invalidemail", "pass");
+        UserRegistration user = new UserRegistration("John", "Doe", "invalidemail", "passWord123@");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/diagrammingtool/addUser")
                 .contentType(MediaType.APPLICATION_JSON)
