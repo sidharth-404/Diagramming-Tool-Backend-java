@@ -29,6 +29,7 @@ public class UserRegistrationController {
 	private UserRegistrationServiceImpl userService;
 	
 
+
 	@PostMapping("/addUser")
 	public ResponseEntity<?> AddUser(@Valid @RequestBody UserRegistration user, BindingResult result) {
 	    if (result.hasErrors()) {
@@ -56,6 +57,7 @@ public class UserRegistrationController {
 	            .collect(Collectors.toList());
 	    return ResponseEntity.badRequest().body(errors);
 	}
+
 	
 	@GetMapping("/getUsers")
 	public ResponseEntity<List<UserRegistration>> getAllUser(){
