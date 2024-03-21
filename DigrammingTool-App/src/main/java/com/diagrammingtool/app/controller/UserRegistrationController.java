@@ -19,11 +19,7 @@ public class UserRegistrationController {
 	@Autowired
 	private UserRegistrationServiceImpl userService;
 	
-	@PostMapping("/addUser")
-	public ResponseEntity<UserRegistration> AddUser(@RequestBody  UserRegistration User) {
-		return ResponseEntity.ok(userService.CreateNewUser(User));
-		
-	}
+	
 	
 	@GetMapping("/getUsers")
 	public ResponseEntity<List<UserRegistration>> getAllUser(){
