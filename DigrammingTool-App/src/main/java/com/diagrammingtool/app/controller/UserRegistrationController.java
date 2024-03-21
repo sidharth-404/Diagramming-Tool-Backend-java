@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.diagrammingtool.app.model.UserRegistration;
-import com.diagrammingtool.app.service.UserRegsitartionServiceImpl;
+import com.diagrammingtool.app.service.UserRegistrationServiceImpl;
 
 @RestController
 @RequestMapping("/api/diagrammingtool")
 public class UserRegistrationController {
 	@Autowired
-	private UserRegsitartionServiceImpl userService;
+	private UserRegistrationServiceImpl userService;
 	
 	@PostMapping("/addUser")
 	public ResponseEntity<UserRegistration> AddUser(@RequestBody  UserRegistration User) {
