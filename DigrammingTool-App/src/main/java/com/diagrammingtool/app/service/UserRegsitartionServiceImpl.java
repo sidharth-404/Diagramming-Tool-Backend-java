@@ -15,6 +15,9 @@ public class UserRegsitartionServiceImpl implements UserRegistrationService {
     PasswordEncryption ps=new  PasswordEncryption();
 	@Override
 	public UserRegistration CreateNewUser(UserRegistration user) {
+		 if (emailExists(user.getUserEmail())) {
+	            throw new IllegalArgumentException("Email already exists");
+	        }
 		String password=ps.hashPassword(user.getPassword());
 		user.setPassword(password);
 		// TODO Auto-generated method stub
@@ -26,5 +29,9 @@ public class UserRegsitartionServiceImpl implements UserRegistrationService {
 		// TODO Auto-generated method stub
 		return userRepo.findAll();
 	}
+	
+	 private boolean emailExists(String email) {
+	        return userRepo.existsByUserEmail(email);
+	    }
 
 }
