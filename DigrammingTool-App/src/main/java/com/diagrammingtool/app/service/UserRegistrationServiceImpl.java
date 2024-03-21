@@ -9,10 +9,11 @@ import com.diagrammingtool.app.model.UserRegistration;
 import com.diagrammingtool.app.repository.UserRegistrationRepository;
 
 @Service
-public class UserRegsitartionServiceImpl implements UserRegistrationService {
+public class UserRegistrationServiceImpl implements UserRegistrationService {
     @Autowired
 	private UserRegistrationRepository userRepo;
-    PasswordEncryption ps=new  PasswordEncryption();
+    @Autowired
+    private PasswordEncryption ps;
 	@Override
 	public UserRegistration CreateNewUser(UserRegistration user) {
 		 if (emailExists(user.getUserEmail())) {
