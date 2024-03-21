@@ -59,7 +59,7 @@ public class RegistrationvalidationTest {
 
     @Test
     public void testAddUserEmailExists() throws Exception {
-        UserRegistration user = new UserRegistration("John", "Doe", "feril@example.com", "Password@123");
+        UserRegistration user = new UserRegistration("Jaaak", "dd", "feril@example.com", "Password@123");
 
         when(userService.CreateNewUser(any(UserRegistration.class))).thenThrow(IllegalArgumentException.class);
 
@@ -73,14 +73,14 @@ public class RegistrationvalidationTest {
     @Test
     public void testGetAllUsers() throws Exception {
         List<UserRegistration> users = new ArrayList<>();
-        users.add(new UserRegistration("John", "Doe", "john.doe@example.com", "Password@123"));
-        users.add(new UserRegistration("Jane", "Smith", "jane.smith@example.com", "Password@456"));
+        users.add(new UserRegistration("sidharth", "pK", "sid@example.com", "Password@123"));
+        users.add(new UserRegistration("Abin", "James", "abinjames@example.com", "Password@456"));
 
         when(userService.getAllUser()).thenReturn(users);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/diagrammingtool/getUsers"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].userEmail").value("john.doe@example.com"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[1].userEmail").value("jane.smith@example.com"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].userEmail").value("sid@example.com"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].userEmail").value("abinjames@example.com"));
     }
 }
