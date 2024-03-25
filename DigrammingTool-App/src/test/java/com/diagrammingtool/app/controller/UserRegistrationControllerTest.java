@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
+
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -20,7 +20,7 @@ import com.diagrammingtool.app.model.UserRegistration;
 import com.diagrammingtool.app.service.UserRegistrationServiceImpl;
 
 
-@RunWith(MockitoJUnitRunner.class)
+
 @SpringBootTest
 class UserRegistrationControllerTest {
 	@Mock
@@ -31,7 +31,7 @@ class UserRegistrationControllerTest {
 	 
 //	 @Test
 //	    public void testAddUser() {
-//		 UserRegistration user1 = new UserRegistration("sidhu","pk","sidhu@gmail.com","tw535t");
+//		 
 //		 when(userService.CreateNewUser(user1)).thenReturn(user1);
 
 //		 ResponseEntity<UserRegistration> responseEntity = userController.AddUser(user1);
