@@ -1,4 +1,4 @@
-package com.diagrammingtool.app.validation;
+package com.diagrammingtool.app.service;
 
 import com.diagrammingtool.app.controller.UserRegistrationController;
 import com.diagrammingtool.app.model.UserRegistration;
@@ -26,6 +26,7 @@ public class RegistrationvalidationTest {
 
     @Autowired
     private MockMvc mockMvc;
+
 
     @MockBean
     private UserRegistrationServiceImpl userService;

@@ -17,6 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.diagrammingtool.app.model.UserRegistration;
 import com.diagrammingtool.app.repository.UserRegistrationRepository;
@@ -32,14 +33,14 @@ class UserRegistrationServiceImplTest {
 	    @Mock
 	    private UserRegistrationRepository userRepoMock;
 	    @Mock
-	    private PasswordEncryption psMock;
+	    private PasswordEncoder passwordEncoder;
 	   
 	   
 		@Test
 		public void addUserTest() {
 			UserRegistration user=new UserRegistration("sidhu","pk","sidhu@gmail.com","tw535t");
 		    String hashedPassword = "hashedPassword";
-	        when(psMock.hashPassword(user.getPassword())).thenReturn(hashedPassword);
+	        when( passwordEncoder.encode(user.getPassword())).thenReturn(hashedPassword);
 		    when(userRepoMock.save(user)).thenReturn(user);
 		    UserRegistration user1=userService.CreateNewUser(user);
 		    assertEquals(user, user1);
