@@ -36,8 +36,9 @@ public class UserRegistrationController {
 	  private final OtpService otpService;
 	  
 	  @Autowired
-	    public UserRegistrationController(OtpService otpService) {
+	    public UserRegistrationController(OtpService otpService,UserRegistrationServiceImpl userService) {
 	        this.otpService = otpService;
+	        this.userService=userService;
 	    }
 
 	@PostMapping("/addUser")

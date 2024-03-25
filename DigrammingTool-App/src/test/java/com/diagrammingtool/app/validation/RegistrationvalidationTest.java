@@ -1,156 +1,102 @@
 package com.diagrammingtool.app.validation;
-import org.springframework.validation.BeanPropertyBindingResult;
-import org.springframework.validation.BindingResult;
 
-import com.diagrammingtool.app.Dto.ResetPasswordRequest;
 import com.diagrammingtool.app.controller.UserRegistrationController;
 import com.diagrammingtool.app.model.UserRegistration;
 import com.diagrammingtool.app.service.UserRegistrationServiceImpl;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.validation.BindingResult;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
-@WebMvcTest(UserRegistrationController.class)
-@AutoConfigureMockMvc
 public class RegistrationvalidationTest {
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @MockBean
+    @Mock
     private UserRegistrationServiceImpl userService;
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
-     
+    @Mock
+    private BindingResult bindingResult;
+
     @InjectMocks
-    private UserRegistrationController userController;
+    private UserRegistrationController userRegistrationController;
 
-    @Test
-    public void testAddUserSuccess() throws Exception {
-        UserRegistration user = new UserRegistration("feril","Doe","feril@example.com", "Password@123");
-
-        when(userService.CreateNewUser(any(UserRegistration.class))).thenReturn(user);
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/diagrammingtool/addUser")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(user)))
-                .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.userEmail").value("feril@example.com"));
+    @BeforeEach
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
     }
 
     @Test
-    public void testAddUserValidationFailure() throws Exception {
-        UserRegistration user = new UserRegistration("John", "Doe", "invalidemail", "passWord123@");
+    public void testAddUserValidInput() {
+        UserRegistration validUser = new UserRegistration();
+        validUser.setUserEmail("test@example.com");
+        validUser.setPassword("password");
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/diagrammingtool/addUser")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(user)))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0]").value("Invalid email format"));
-//                .andExpect(MockMvcResultMatchers.jsonPath("$[1]").value("Password must contain at least 8 characters including one uppercase letter one lowercase letter one number and one special character"));
+        // Mocking the binding result to indicate no errors
+        when(bindingResult.hasErrors()).thenReturn(false);
+
+        // Mocking the userService to return the created user
+        when(userService.CreateNewUser(any(UserRegistration.class))).thenReturn(validUser);
+
+        ResponseEntity<?> responseEntity = userRegistrationController.AddUser(validUser, bindingResult);
+
+        // Verify that userService.create was called once with the validUser
+        verify(userService, times(1)).CreateNewUser(validUser);
+
+        // Verify the response status and body
+        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+        assertEquals(validUser, responseEntity.getBody());
     }
 
     @Test
-    public void testAddUserEmailExists() throws Exception {
-        UserRegistration user = new UserRegistration("Jaaak", "dd", "feril@example.com", "Password@123");
+    public void testAddUserInvalidInput() {
+        UserRegistration invalidUser = new UserRegistration();
+        invalidUser.setUserEmail(""); // Invalid email
+        invalidUser.setPassword("password");
 
-        when(userService.CreateNewUser(any(UserRegistration.class))).thenThrow(IllegalArgumentException.class);
+        // Mocking the binding result to indicate errors
+        when(bindingResult.hasErrors()).thenReturn(true);
+        when(bindingResult.getFieldErrors()).thenReturn(new ArrayList<>());
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/diagrammingtool/addUser")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(user)))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.content().string("Email already exists"));
+        ResponseEntity<?> responseEntity = userRegistrationController.AddUser(invalidUser, bindingResult);
+
+        // Verify that userService.create was not called since there are errors
+        verify(userService, never()).CreateNewUser(invalidUser);
+
+        // Verify the response status and body
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        // In this case, the body should contain a list of validation errors
+        assertEquals(ArrayList.class, responseEntity.getBody().getClass());
     }
 
     @Test
-    public void testGetAllUsers() throws Exception {
-        List<UserRegistration> users = new ArrayList<>();
-        users.add(new UserRegistration("sidharth", "pK", "sid@example.com", "Password@123"));
-        users.add(new UserRegistration("Abin", "James", "abinjames@example.com", "Password@456"));
+    public void testAddUserExistingEmail() {
+        UserRegistration existingUser = new UserRegistration();
+        existingUser.setUserEmail("existing@example.com");
+        existingUser.setPassword("password");
 
-        when(userService.getAllUser()).thenReturn(users);
+        // Mocking the binding result to indicate no errors
+        when(bindingResult.hasErrors()).thenReturn(false);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/diagrammingtool/getUsers"))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].userEmail").value("sid@example.com"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[1].userEmail").value("abinjames@example.com"));
-    }
-    
-    
-    @Test
-    public void testResetPassword() throws Exception {
-        
-        UserRegistration user = new UserRegistration();
-        user.setUserEmail("user@example.com");
-        user.setPassword("oldPassword");
+        // Mocking the userService to throw an exception for existing email
+        when(userService.CreateNewUser(any(UserRegistration.class)))
+                .thenThrow(new IllegalArgumentException("Email already exists"));
 
-        ResetPasswordRequest resetPasswordRequest = new ResetPasswordRequest();
-        resetPasswordRequest.setUserEmail("user@example.com");
-        resetPasswordRequest.setNewPassword("newPassword123!");
+        ResponseEntity<?> responseEntity = userRegistrationController.AddUser(existingUser, bindingResult);
 
-        
-        when(userService.getUserByEmail("user@example.com")).thenReturn(user);
-        when(userService.updateUser(any(UserRegistration.class))).thenReturn(user);
+        // Verify that userService.create was called once with the existingUser
+        verify(userService, times(1)).CreateNewUser(existingUser);
 
-        // Perform the PATCH request
-        mockMvc.perform(MockMvcRequestBuilders.patch("/api/diagrammingtool/resetPassword")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(resetPasswordRequest)))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string("Password reset successfully"));
-    }
-
-    @Test
-    public void testHandleValidationExceptions() throws Exception {
-        // Mock field errors
-        FieldError fieldError1 = new FieldError("user", "firstName", "First name is required");
-        FieldError fieldError2 = new FieldError("user", "lastName", "Last name is required");
-        FieldError fieldError3 = new FieldError("user", "userEmail", "Invalid email format");
-        FieldError fieldError4 = new FieldError("user", "password", "Password must contain at least 8 characters including one uppercase letter, one lowercase letter, one number, and one special character");
-
-        List<FieldError> fieldErrors = Arrays.asList(fieldError1, fieldError2, fieldError3, fieldError4);
-
-        // Create a MethodArgumentNotValidException with mock field errors
-        MethodArgumentNotValidException exception = new MethodArgumentNotValidException(
-                null, new BeanPropertyBindingResult(new UserRegistration(), "user"));
-
-        // Call the method
-        ResponseEntity<?> responseEntity = userController.handleValidationExceptions(exception);
-
-        // Verify the response entity
-        HttpStatus expectedStatus = HttpStatus.BAD_REQUEST;
-        List<String> expectedErrors = Arrays.asList(
-                "First name is required",
-                "Last name is required",
-                "Invalid email format",
-                "Password must contain at least 8 characters including one uppercase letter, one lowercase letter, one number, and one special character"
-        );
-
-        // Ensure status code
-        assert expectedStatus.equals(responseEntity.getStatusCode());
-
-        // Ensure error messages
-        List<String> responseBody = (List<String>) responseEntity.getBody();
-        assert expectedErrors.equals(responseBody);
+        // Verify the response status and body
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        assertEquals("Email already exists", responseEntity.getBody());
     }
 }

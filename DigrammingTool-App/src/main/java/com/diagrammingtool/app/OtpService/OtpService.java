@@ -46,4 +46,14 @@ public class OtpService {
         String storedOtp = otpMap.get(userEmail);
         return storedOtp != null && storedOtp.equals(otp);
     }
+
+	public void setOtpMap(Map<String, String> otpMap2) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public Map<String, String> getOtpMap() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
