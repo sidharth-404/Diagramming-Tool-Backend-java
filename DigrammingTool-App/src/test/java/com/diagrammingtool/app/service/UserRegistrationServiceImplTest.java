@@ -12,6 +12,8 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 
 
+
+
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -33,8 +35,16 @@ class UserRegistrationServiceImplTest {
 	    @Mock
 	    private UserRegistrationRepository userRepoMock;
 	    @Mock
+
 	    private PasswordEncoder passwordEncoder;
 	   
+
+	 
+	  
+	   public void setUp() {
+		 
+	   }
+
 	   
 		@Test
 		public void addUserTest() {

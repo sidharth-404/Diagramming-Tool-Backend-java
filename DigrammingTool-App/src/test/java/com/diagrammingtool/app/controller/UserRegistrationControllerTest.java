@@ -29,7 +29,7 @@ class UserRegistrationControllerTest {
 	 
 //	 @Test
 //	    public void testAddUser() {
-//		 UserRegistration user1 = new UserRegistration("sidhu","pk","sidhu@gmail.com","tw535t");
+//		 
 //		 when(userService.CreateNewUser(user1)).thenReturn(user1);
 
 //		 ResponseEntity<UserRegistration> responseEntity = userController.AddUser(user1);
