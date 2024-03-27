@@ -48,11 +48,11 @@ public class UserLoginController {
     	{
     		 if (e.getMessage().equals("user not found")) {
                  
-                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"error\": \"user not found\"}");
+                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("user not found");
              }
     		 else {
                  
-                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"error\": \"invalid password\"}");
+                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("invalid password");
              }
     	}
     	

@@ -50,42 +50,42 @@ public class RegistrationvalidationTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.userEmail").value("feril@example.com"));
     }
 
-//    @Test
-//    public void testAddUserValidationFailure() throws Exception {
-//        UserRegistration user = new UserRegistration("John", "Doe", "invalidemail", "passWord123@");
-//
-//        mockMvc.perform(MockMvcRequestBuilders.post("/api/diagrammingtool/addUser")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(objectMapper.writeValueAsString(user)))
-//                .andExpect(MockMvcResultMatchers.status().isBadRequest())
-//                .andExpect(MockMvcResultMatchers.jsonPath("$[0]").value("Invalid email format"));
-////                .andExpect(MockMvcResultMatchers.jsonPath("$[1]").value("Password must contain at least 8 characters including one uppercase letter one lowercase letter one number and one special character"));
-//    }
-//
-//    @Test
-//    public void testAddUserEmailExists() throws Exception {
-//        UserRegistration user = new UserRegistration("Jaaak", "dd", "feril@example.com", "Password@123");
-//
-//        when(userService.CreateNewUser(any(UserRegistration.class))).thenThrow(IllegalArgumentException.class);
-//
-//        mockMvc.perform(MockMvcRequestBuilders.post("/api/diagrammingtool/addUser")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(objectMapper.writeValueAsString(user)))
-//                .andExpect(MockMvcResultMatchers.status().isBadRequest())
-//                .andExpect(MockMvcResultMatchers.content().string("Email already exists"));
-//    }
-//
-//    @Test
-//    public void testGetAllUsers() throws Exception {
-//        List<UserRegistration> users = new ArrayList<>();
-//        users.add(new UserRegistration("sidharth", "pK", "sid@example.com", "Password@123"));
-//        users.add(new UserRegistration("Abin", "James", "abinjames@example.com", "Password@456"));
-//
-//        when(userService.getAllUser()).thenReturn(users);
-//
-//        mockMvc.perform(MockMvcRequestBuilders.get("/api/diagrammingtool/getUsers"))
-//                .andExpect(MockMvcResultMatchers.status().isOk())
-//                .andExpect(MockMvcResultMatchers.jsonPath("$[0].userEmail").value("sid@example.com"))
-//                .andExpect(MockMvcResultMatchers.jsonPath("$[1].userEmail").value("abinjames@example.com"));
-//    }
+    @Test
+    public void testAddUserValidationFailure() throws Exception {
+        UserRegistration user = new UserRegistration("John", "Doe", "invalidemail", "passWord123@");
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/diagrammingtool/addUser")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(user)))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0]").value("Invalid email format"));
+               //.andExpect(MockMvcResultMatchers.jsonPath("$[1]").value("Password must contain at least 8 characters including one uppercase letter one lowercase letter one number and one special character"));
+    }
+
+    @Test
+    public void testAddUserEmailExists() throws Exception {
+        UserRegistration user = new UserRegistration("Jaaak", "dd", "feril@example.com", "Password@123");
+
+        when(userService.CreateNewUser(any(UserRegistration.class))).thenThrow(IllegalArgumentException.class);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/diagrammingtool/addUser")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(user)))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.content().string("Email already exists"));
+    }
+
+    @Test
+    public void testGetAllUsers() throws Exception {
+        List<UserRegistration> users = new ArrayList<>();
+        users.add(new UserRegistration("sidharth", "pK", "sid@example.com", "Password@123"));
+        users.add(new UserRegistration("Abin", "James", "abinjames@example.com", "Password@456"));
+
+        when(userService.getAllUser()).thenReturn(users);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/diagrammingtool/getUsers"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].userEmail").value("sid@example.com"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].userEmail").value("abinjames@example.com"));
+    }
 }
