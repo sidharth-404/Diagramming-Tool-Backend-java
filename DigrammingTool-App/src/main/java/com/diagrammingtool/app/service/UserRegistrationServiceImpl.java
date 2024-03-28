@@ -22,15 +22,25 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
 	        }
 		String password=passwordEncoder.encode(user.getPassword());
 		user.setPassword(password);
-		// TODO Auto-generated method stub
+		
 		return userRepo.save(user);
 	}
 
 	@Override
 	public List<UserRegistration> getAllUser() {
-		// TODO Auto-generated method stub
+		
 		return userRepo.findAll();
 	}
+	
+	 public UserRegistration getUserByEmail(String userEmail) {
+	        return userRepo.findByUserEmail(userEmail);
+	    }
+
+	    public UserRegistration updateUser(UserRegistration user) {
+	    	String password=passwordEncoder.encode(user.getPassword());
+			user.setPassword(password);
+	        return userRepo.save(user);
+	    }
 	
 	 private boolean emailExists(String email) {
 	        return userRepo.existsByUserEmail(email);
