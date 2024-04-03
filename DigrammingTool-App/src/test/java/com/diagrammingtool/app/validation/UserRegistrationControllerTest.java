@@ -99,8 +99,7 @@ public class UserRegistrationControllerTest {
         request.setUserEmail(userEmail);
         request.setOtp("invalid_otp"); // Invalid OTP
 
-        // Do not stub this method call
-        // when(otpService.isValidOtp(userEmail, "invalid_otp")).thenReturn(false);
+      
 
         ResponseEntity<?> responseEntity = userRegistrationController.resetPasswordVerify(request);
 
@@ -117,7 +116,7 @@ public class UserRegistrationControllerTest {
         // Mock userService to return null, simulating user not found
         when(userService.getUserByEmail(userEmail)).thenReturn(null);
 
-        ResponseEntity<?> responseEntity = userRegistrationController.resetPasswordVerify(request);
+        ResponseEntity<?> responseEntity = userRegistrationController.resetPasswordRequest(request);
 
         assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
         assertEquals("User not found", responseEntity.getBody());

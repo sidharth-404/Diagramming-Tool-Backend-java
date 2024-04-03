@@ -3,7 +3,7 @@
  */
 package com.diagrammingtool.app.service;
 
-import static org.junit.Assert.assertEquals;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -11,13 +11,15 @@ import static org.mockito.Mockito.when;
 
 import java.util.List;
 
-import org.junit.Before;
-import org.junit.jupiter.api.BeforeEach;
+
+
+
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.diagrammingtool.app.model.UserRegistration;
 import com.diagrammingtool.app.repository.UserRegistrationRepository;
@@ -33,17 +35,22 @@ class UserRegistrationServiceImplTest {
 	    @Mock
 	    private UserRegistrationRepository userRepoMock;
 	    @Mock
-	    private PasswordEncryption psMock;
-	   @Before
+
+	    private PasswordEncoder passwordEncoder;
+	   
+
+	 
+	  
 	   public void setUp() {
 		 
 	   }
+
 	   
 		@Test
 		public void addUserTest() {
 			UserRegistration user=new UserRegistration("sidhu","pk","sidhu@gmail.com","tw535t");
 		    String hashedPassword = "hashedPassword";
-	        when(psMock.hashPassword(user.getPassword())).thenReturn(hashedPassword);
+	        when( passwordEncoder.encode(user.getPassword())).thenReturn(hashedPassword);
 		    when(userRepoMock.save(user)).thenReturn(user);
 		    UserRegistration user1=userService.CreateNewUser(user);
 		    assertEquals(user, user1);
