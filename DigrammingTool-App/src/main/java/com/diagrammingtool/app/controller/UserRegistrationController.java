@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpStatus;
@@ -59,24 +61,19 @@ public class UserRegistrationController {
 	   
 	}
 	
+	@GetMapping("/user/{userEmail}")
+    public ResponseEntity<?> getUserByEmail(@PathVariable String userEmail) {
+        UserRegistration user = userService.getUserByEmail(userEmail);
+        
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body("User not found with email: " + userEmail);
+        }
+        
+        return ResponseEntity.ok(user);
+    }
 
-//    @PatchMapping("/resetPassword")
-//    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest) {
-//        String userEmail = resetPasswordRequest.getUserEmail();
-//        String newPassword = resetPasswordRequest.getNewPassword();
-//
-//      
-//        UserRegistration user = userService.getUserByEmail(userEmail);
-//        if (user == null) {
-//            return ResponseEntity.badRequest().body("User not found");
-//        }
-//
-//       
-//        user.setPassword(newPassword);
-//        userService.updateUser(user);
-//
-//        return ResponseEntity.ok("Password reset successfully");
-//    }
+
 
 	
 	
