@@ -21,21 +21,24 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpStatus;
-
-import com.diagrammingtool.app.Dto.ResetPasswordRequest;
 import com.diagrammingtool.app.OtpService.OtpService;
+import com.diagrammingtool.app.Dto.ResetPasswordRequest;
 import com.diagrammingtool.app.model.UserRegistration;
 import com.diagrammingtool.app.service.UserRegistrationServiceImpl;
+import com.diagrammingtool.app.util.JwtUtil;
 
 @RestController
 @RequestMapping("/api/diagrammingtool")
-@CrossOrigin(origins = "*")
+@CrossOrigin("*")
 public class UserRegistrationController {
 	
 	@Autowired
 	private UserRegistrationServiceImpl userService;
 	
 	  private final OtpService otpService;
+	  
+	  @Autowired
+		private JwtUtil jwtUtil;
 	  
 	  @Autowired
 	    public UserRegistrationController(OtpService otpService,UserRegistrationServiceImpl userService) {
@@ -61,13 +64,20 @@ public class UserRegistrationController {
 	   
 	}
 	
-	@GetMapping("/user/{userEmail}")
-    public ResponseEntity<?> getUserByEmail(@PathVariable String userEmail) {
-        UserRegistration user = userService.getUserByEmail(userEmail);
+	@GetMapping("/user/{jwtToken}")
+    public ResponseEntity<?> getUserByEmail(@PathVariable String jwtToken) {
+		
+		
+		String userEmailToken= jwtUtil.getUsernameFromToken(jwtToken);
+        if(userEmailToken==null) {
+     	   return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized email");
+     	   
+        }
+        UserRegistration user = userService.getUserByEmail(userEmailToken);
         
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body("User not found with email: " + userEmail);
+                .body("User not found with email: " + userEmailToken);
         }
         
         return ResponseEntity.ok(user);

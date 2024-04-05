@@ -1,4 +1,4 @@
-package com.diagrammingtool.app.validation;
+package com.diagrammingtool.app.service;
 import com.diagrammingtool.app.Dto.ResetPasswordRequest;
 import com.diagrammingtool.app.OtpService.OtpService;
 import com.diagrammingtool.app.controller.UserRegistrationController;
@@ -31,7 +31,7 @@ public class UserRegistrationControllerTest {
     @Test
     public void testResetPasswordRequest() {
         String userEmail = "abinjames409@gmail.com";
-        ResetPasswordRequest request = new ResetPasswordRequest();
+       ResetPasswordRequest request = new ResetPasswordRequest();
         request.setUserEmail(userEmail);
 
         String otp = "123456"; // Mock OTP

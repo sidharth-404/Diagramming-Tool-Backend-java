@@ -28,4 +28,23 @@ public class UserLoginServiceImpl implements UserLoginService{
 	        	throw new IllegalArgumentException("invalid password");
 	        }
 	       }
+	    
+	   
+	    public boolean verifyUserPassword(String userEmail, String password) {
+	        UserRegistration user = userDetails.findByUserEmail(userEmail);
+	        if (user == null) {
+	            throw new IllegalArgumentException("User not found");
+	        }
+	        return passwordEncoder.matches(password, user.getPassword());
+	    }
+ 
+
+	    public void changeUserPassword(String userEmail, String newPassword) {
+	        UserRegistration user = userDetails.findByUserEmail(userEmail);
+	        if (user == null) {
+	            throw new IllegalArgumentException("User not found");
+	        }
+	        user.setPassword(passwordEncoder.encode(newPassword));
+	        userDetails.save(user);
+	    }
 }

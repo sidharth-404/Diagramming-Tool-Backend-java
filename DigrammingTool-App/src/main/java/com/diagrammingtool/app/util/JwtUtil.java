@@ -18,7 +18,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Component
 public class JwtUtil {
 	
-	 public static final long JWT_TOKEN_VALIDITY = 5 * 60;
+	 public static final long JWT_TOKEN_VALIDITY =1000 * 60 * 60 * 24;
 
 
 	    private String secret = "asdfghjklqwertyuiopxcvbnmsrtyuiocvbnmdfghsghgdsjhgdshjdnvdhjvdavnbadsvnadvbnadvdhgavdavdafdahgvdanbvdahgvdabndavh";
@@ -46,6 +46,8 @@ public class JwtUtil {
 	    private Claims getAllClaimsFromToken(String token) {
 	        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
 	    }
+	    
+	   
 
 	//check if the token has expired
 

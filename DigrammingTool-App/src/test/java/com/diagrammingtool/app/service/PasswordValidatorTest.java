@@ -1,4 +1,4 @@
-package com.diagrammingtool.app.validation;
+package com.diagrammingtool.app.service;
 
 import com.diagrammingtool.app.validation.PasswordValidator;
 import org.junit.jupiter.api.BeforeEach;
