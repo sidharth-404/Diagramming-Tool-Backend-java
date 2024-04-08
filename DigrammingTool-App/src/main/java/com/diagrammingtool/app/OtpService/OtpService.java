@@ -23,7 +23,6 @@ public class OtpService {
     }
 
     public String generateOtp() {
-        // Generate a 6-digit OTP
         Random random = new Random();
         int otp = 100000 + random.nextInt(900000);
         return String.valueOf(otp);
@@ -37,12 +36,12 @@ public class OtpService {
 
         emailSender.send(message);
 
-        // Store OTP in map for verification later
+      
         otpMap.put(userEmail, otp);
     }
 
     public boolean isValidOtp(String userEmail, String otp) {
-        // Get stored OTP from map
+       
         String storedOtp = otpMap.get(userEmail);
         return storedOtp != null && storedOtp.equals(otp);
     }

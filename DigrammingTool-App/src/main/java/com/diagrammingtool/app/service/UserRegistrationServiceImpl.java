@@ -45,5 +45,6 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
 	 private boolean emailExists(String email) {
 	        return userRepo.existsByUserEmail(email);
 	    }
+	 
 
 }

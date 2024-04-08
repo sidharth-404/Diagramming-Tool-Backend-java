@@ -61,14 +61,15 @@ public class OtpServiceTest {
         String userEmail = "test@example.com";
         String otp = "123456";
 
-        // Set up a valid OTP in the map
+        // Initialize the otpMap before putting a value
         Map<String, String> otpMap = new HashMap<>();
-        otpMap.put(userEmail, otp);
         otpService.setOtpMap(otpMap);
+
+        // Set up a valid OTP in the map
+        otpMap.put(userEmail, otp);
 
         assertTrue(otpService.isValidOtp(userEmail, otp));
     }
-
     @Test
     public void testIsValidOtpInvalid() {
         String userEmail = "test@example.com";

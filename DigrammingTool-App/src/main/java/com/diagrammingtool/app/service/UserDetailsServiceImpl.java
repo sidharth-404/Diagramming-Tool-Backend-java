@@ -12,8 +12,14 @@ import com.diagrammingtool.app.repository.UserRegistrationRepository;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-	@Autowired
+	
 	private UserRegistrationRepository repo;
+	
+	 @Autowired
+	    public UserDetailsServiceImpl(UserRegistrationRepository repo) {
+	        this.repo = repo;
+	    }
+	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		// TODO Auto-generated method stub
