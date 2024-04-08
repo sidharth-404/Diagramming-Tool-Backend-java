@@ -45,7 +45,7 @@ public class UserLoginController {
                 }
     		userLoginService.loginUser(userLogin.getUserEmail(),userLogin.getPassword());
     		String jwtToken = jwtUtil.generateToken(userLogin.getUserEmail());
-    		return ResponseEntity.ok().body(jwtToken);
+    		return ResponseEntity.status(HttpStatus.OK).body(jwtToken);
     	}catch(IllegalArgumentException e)
     	{
     		 if (e.getMessage().equals("user not found")) {
@@ -71,7 +71,6 @@ public class UserLoginController {
             String confirmPassword = requestBody.get("confirmPassword");
             String jwtToken=requestBody.get("jwtToken");
             
-         System.out.println(jwtToken);
             // Verify the user's current password
             if (!userLoginService.verifyUserPassword(userEmail, currentPassword)) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect current password");
@@ -87,7 +86,6 @@ public class UserLoginController {
         	   
            }
            
-            // Change the user's password
             userLoginService.changeUserPassword(userEmail, newPassword);
  
             return ResponseEntity.ok("Password changed successfully");
