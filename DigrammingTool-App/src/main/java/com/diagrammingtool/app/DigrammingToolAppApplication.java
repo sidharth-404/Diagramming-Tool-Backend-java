@@ -9,7 +9,7 @@ public class DigrammingToolAppApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(DigrammingToolAppApplication.class, args);
-		System.out.println("Hello");
+		System.out.println("App started !!!!");
 		
 	}
 

@@ -48,7 +48,6 @@ public class CanvasImageControllerTest {
     
     @Test
     public void testGetAllImages() {
-        // Create a list of dummy CanvasImage objects
         List<CanvasImage> dummyImageList = new ArrayList<>();
         CanvasImage dummyCanvasImage1 = new CanvasImage();
         dummyCanvasImage1.setId(1L);

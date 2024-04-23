@@ -25,7 +25,7 @@ public class CanvasImageTest {
 
     @Test
     public void testSetters() {
-        // Create a UserRegistration object for testing
+        
         UserRegistration user = new UserRegistration();
         user.setUserId(1L);
         user.setUserEmail("testUser");

@@ -42,15 +42,9 @@ public class UserLoginControllerTest {
         userLogin.setPassword("password");
 
         String jwtToken = "mockJwtToken";
-
-        // Mock service method to just verify that it was called
         doNothing().when(userLoginService).loginUser("test@example.com", "password");
         when(jwtUtil.generateToken("test@example.com")).thenReturn(jwtToken);
-
-        // Call the controller method
         ResponseEntity<?> response = userLoginController.UserRegistration(userLogin);
-
-        // Verify
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(jwtToken, response.getBody());
     }
@@ -58,15 +52,10 @@ public class UserLoginControllerTest {
 
     @Test
     public void testUserLogin_UserNotFound() {
-        // Mock data
         UserLogin userLogin = new UserLogin();
         userLogin.setUserEmail("test@example.com");
         userLogin.setPassword("password");
-
-        // Mock service method
         doThrow(new IllegalArgumentException("user not found")).when(userLoginService).loginUser("test@example.com", "password");
-
-        // Call the controller method
         ResponseEntity<?> response = userLoginController.UserRegistration(userLogin);
 
         // Verify
@@ -76,25 +65,17 @@ public class UserLoginControllerTest {
 
     @Test
     public void testUserLogin_InvalidPassword() {
-        // Mock data
         UserLogin userLogin = new UserLogin();
         userLogin.setUserEmail("test@example.com");
         userLogin.setPassword("password");
-
-        // Mock service method
         doThrow(new IllegalArgumentException("invalid password")).when(userLoginService).loginUser("test@example.com", "password");
-
-        // Call the controller method
         ResponseEntity<?> response = userLoginController.UserRegistration(userLogin);
-
-        // Verify
         assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
         assertEquals("invalid password", response.getBody());
     }
 
     @Test
     public void testChangePassword_Success() {
-        // Mock data
         Map<String, String> requestBody = new HashMap<>();
         requestBody.put("userEmail", "test@example.com");
         requestBody.put("currentPassword", "currentPassword");
@@ -125,13 +106,8 @@ public class UserLoginControllerTest {
         requestBody.put("confirmPassword", "newPassword");
         requestBody.put("jwtToken", "mockJwtToken");
 
-        // Mock service method
         when(userLoginService.verifyUserPassword("test@example.com", "currentPassword")).thenReturn(false);
-
-        // Call the controller method
         ResponseEntity<?> response = userLoginController.changePassword(requestBody);
-
-        // Verify
         assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
         assertEquals("Incorrect current password", response.getBody());
     }
@@ -146,32 +122,22 @@ public class UserLoginControllerTest {
         requestBody.put("confirmPassword", "differentPassword");
         requestBody.put("jwtToken", "mockJwtToken");
 
-        // Call the controller method
         ResponseEntity<?> response = userLoginController.changePassword(requestBody);
-
-        // Verify
         assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
         assertEquals("Incorrect current password", response.getBody());
     }
 
     @Test
     public void testChangePassword_UnauthorizedEmail() {
-        // Mock data
         Map<String, String> requestBody = new HashMap<>();
         requestBody.put("userEmail", "test@example.com");
         requestBody.put("currentPassword", "currentPassword");
         requestBody.put("newPassword", "newPassword");
         requestBody.put("confirmPassword", "newPassword");
         requestBody.put("jwtToken", "mockJwtToken");
-
-        // Mock service method
         when(userLoginService.verifyUserPassword("test@example.com", "currentPassword")).thenReturn(true);
         when(jwtUtil.getUsernameFromToken("mockJwtToken")).thenReturn("different@example.com");
-
-        // Call the controller method
         ResponseEntity<?> response = userLoginController.changePassword(requestBody);
-
-        // Verify
         assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
         assertEquals("Unauthorized email", response.getBody());
     }

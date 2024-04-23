@@ -27,20 +27,6 @@ class UserRegistrationControllerTest {
 	 private UserRegistrationController userController;
 
 	 
-//	 @Test
-//	    public void testAddUser() {
-//		 
-//		 when(userService.CreateNewUser(user1)).thenReturn(user1);
-
-//		 ResponseEntity<UserRegistration> responseEntity = userController.AddUser(user1);
-
-//		 ResponseEntity<?> responseEntity = userController.AddUser(user1, null);
-
-//		 assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-//	     assertEquals(user1, responseEntity.getBody());
-		 
-	  // }
-	 
 	@Test
 	public void testGetAllUser() {
 		List<UserRegistration> users = new ArrayList<>();
