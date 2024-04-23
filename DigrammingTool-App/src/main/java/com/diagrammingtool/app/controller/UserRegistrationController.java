@@ -9,25 +9,41 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpStatus;
-
-
+import com.diagrammingtool.app.OtpService.OtpService;
+import com.diagrammingtool.app.dto.ResetPasswordRequest;
 import com.diagrammingtool.app.model.UserRegistration;
 import com.diagrammingtool.app.service.UserRegistrationServiceImpl;
+import com.diagrammingtool.app.util.JwtUtil;
 
 @RestController
 @RequestMapping("/api/diagrammingtool")
+@CrossOrigin("*")
 public class UserRegistrationController {
+	
 	@Autowired
 	private UserRegistrationServiceImpl userService;
 	
+	  private final OtpService otpService;
+	  
+	  @Autowired
+		private JwtUtil jwtUtil;
+	  
+	    @Autowired
+	    public UserRegistrationController(OtpService otpService,UserRegistrationServiceImpl userService) {
+	        this.otpService = otpService;
+	        this.userService=userService;
+	    }
 
 
 	@PostMapping("/addUser")
@@ -46,6 +62,30 @@ public class UserRegistrationController {
 
 	   
 	}
+	
+	@GetMapping("/user/{jwtToken}")
+    public ResponseEntity<?> getUserByEmail(@PathVariable String jwtToken) {
+		
+		
+		String userEmailToken= jwtUtil.getUsernameFromToken(jwtToken);
+        if(userEmailToken==null) {
+     	   return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized email");
+     	   
+        }
+        UserRegistration user = userService.getUserByEmail(userEmailToken);
+        
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body("User not found with email: " + userEmailToken);
+        }
+        
+        return ResponseEntity.ok(user);
+    }
+
+
+
+	
+	
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -63,5 +103,48 @@ public class UserRegistrationController {
 	public ResponseEntity<List<UserRegistration>> getAllUser(){
 		return ResponseEntity.ok(userService.getAllUser());
 				}
+	
+	
+	
+	
+	
+	@PostMapping("/resetPassword")
+    public ResponseEntity<?> resetPasswordRequest(@RequestBody ResetPasswordRequest resetPasswordRequest) {
+        String userEmail = resetPasswordRequest.getUserEmail();
+  
+        String otp = otpService.generateOtp();
+        UserRegistration user = userService.getUserByEmail(userEmail);
+        if (user == null) {
+            return ResponseEntity.badRequest().body("User not found");
+        }
+        
+        otpService.sendOtpEmail(userEmail, otp);
+      
+        return ResponseEntity.ok("OTP sent to " + userEmail + " for validation");
+    }
+
+    @PatchMapping("/resetPassword/verify")
+    public ResponseEntity<?> resetPasswordVerify(@RequestBody ResetPasswordRequest resetPasswordRequest) {
+        String userEmail = resetPasswordRequest.getUserEmail();
+        String newPassword = resetPasswordRequest.getNewPassword();
+        String otp = resetPasswordRequest.getOtp();
+
+       
+        if (!otpService.isValidOtp(userEmail, otp)) {
+            return ResponseEntity.badRequest().body("Invalid OTP");
+        }
+
+      
+        UserRegistration user = userService.getUserByEmail(userEmail);
+        if (user == null) {
+            return ResponseEntity.badRequest().body("User not found");
+        }
+
+       
+        user.setPassword(newPassword);
+        userService.updateUser(user);
+
+        return ResponseEntity.ok("Password reset successfully");
+    }
 
 }
