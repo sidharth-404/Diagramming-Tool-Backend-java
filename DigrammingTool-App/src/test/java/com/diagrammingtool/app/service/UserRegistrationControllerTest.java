@@ -1,5 +1,5 @@
 package com.diagrammingtool.app.service;
-import com.diagrammingtool.app.Dto.ResetPasswordRequest;
+import com.diagrammingtool.app.dto.ResetPasswordRequest;
 import com.diagrammingtool.app.OtpService.OtpService;
 import com.diagrammingtool.app.controller.UserRegistrationController;
 import com.diagrammingtool.app.model.UserRegistration;

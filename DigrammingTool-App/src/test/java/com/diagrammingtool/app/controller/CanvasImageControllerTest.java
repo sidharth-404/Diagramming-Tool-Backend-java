@@ -33,56 +33,45 @@ public class CanvasImageControllerTest {
     public void testSaveCanvasImage() {
         CanvasImage canvasImage = new CanvasImage();
         canvasImage.setId(1L);
-        canvasImage.setImageData(new byte[]{1, 2, 3});
+        canvasImage.setImageByte(new byte[]{1, 2, 3});
+        canvasImage.setImageJson("nhklhuygyyufdrd");
+        canvasImage.setImageName("canvas1");
 
         when(canvasImageService.saveCanvasImage(any(CanvasImage.class))).thenReturn(canvasImage);
 
-        ResponseEntity<CanvasImage> responseEntity = canvasImageController.saveCanvasImage(canvasImage);
+        ResponseEntity<CanvasImage> responseEntity = canvasImageController.SaveImage(canvasImage);
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertEquals(canvasImage, responseEntity.getBody());
     }
-
+    
+    
     @Test
-    public void testGetCanvasImagesByUserId() {
-        Long userId = 1L;
-        List<CanvasImage> canvasImages = new ArrayList<>();
-        canvasImages.add(new CanvasImage(1L, new byte[]{1, 2, 3}, null));
-        canvasImages.add(new CanvasImage(2L, new byte[]{4, 5, 6}, null));
+    public void testGetAllImages() {
+        // Create a list of dummy CanvasImage objects
+        List<CanvasImage> dummyImageList = new ArrayList<>();
+        CanvasImage dummyCanvasImage1 = new CanvasImage();
+        dummyCanvasImage1.setId(1L);
+        dummyCanvasImage1.setImageName("DummyImage1");
+        dummyImageList.add(dummyCanvasImage1);
+        CanvasImage dummyCanvasImage2 = new CanvasImage();
+        dummyCanvasImage2.setId(2L);
+        dummyCanvasImage2.setImageName("DummyImage2");
+        dummyImageList.add(dummyCanvasImage2);
 
-        when(canvasImageService.getCanvasImagesByUserId(userId)).thenReturn(canvasImages);
+        when(canvasImageService.getFileName(anyLong())).thenReturn(dummyImageList);
 
-        ResponseEntity<List<CanvasImage>> responseEntity = canvasImageController.getCanvasImagesByUserId(userId);
+        ResponseEntity<List<CanvasImage>> response = canvasImageController.getAllImages(123L);
 
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(canvasImages, responseEntity.getBody());
+        verify(canvasImageService).getFileName(123L);
+
+        assert response.getStatusCode() == HttpStatus.OK;
+        assert response.getBody() != null;
+        assert response.getBody().size() == dummyImageList.size();
+        assert response.getBody().get(0).getId().equals(dummyCanvasImage1.getId());
+        assert response.getBody().get(0).getImageName().equals(dummyCanvasImage1.getImageName());
+        assert response.getBody().get(1).getId().equals(dummyCanvasImage2.getId());
+        assert response.getBody().get(1).getImageName().equals(dummyCanvasImage2.getImageName());
     }
 
-    @Test
-    public void testGetAllUser() {
-        List<CanvasImage> canvasImages = new ArrayList<>();
-        canvasImages.add(new CanvasImage(1L, new byte[]{1, 2, 3}, null));
-        canvasImages.add(new CanvasImage(2L, new byte[]{4, 5, 6}, null));
-
-        when(canvasImageService.getAllDiagrams()).thenReturn(canvasImages);
-
-        ResponseEntity<List<CanvasImage>> responseEntity = canvasImageController.getAllUser();
-
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(canvasImages, responseEntity.getBody());
-    }
-
-    @Test
-    public void testUpdateCanvasImage() {
-        Long id = 1L;
-        CanvasImage updatedCanvasImage = new CanvasImage(1L, new byte[]{7, 8, 9}, null);
-        CanvasImage originalCanvasImage = new CanvasImage(1L, new byte[]{1, 2, 3}, null);
-
-        when(canvasImageService.updateCanvasImage(id, updatedCanvasImage)).thenReturn(updatedCanvasImage);
-
-        ResponseEntity<CanvasImage> responseEntity = canvasImageController.updateCanvasImage(id, updatedCanvasImage);
-
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-        assertEquals(updatedCanvasImage, responseEntity.getBody());
-    }
 }

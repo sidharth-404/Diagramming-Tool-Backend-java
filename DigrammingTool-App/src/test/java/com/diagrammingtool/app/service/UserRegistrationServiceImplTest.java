@@ -5,7 +5,10 @@ package com.diagrammingtool.app.service;
 
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -35,16 +38,8 @@ class UserRegistrationServiceImplTest {
 	    @Mock
 	    private UserRegistrationRepository userRepoMock;
 	    @Mock
-
-	    private PasswordEncoder passwordEncoder;
-	   
-
-	 
+        private PasswordEncoder passwordEncoder;
 	  
-	   public void setUp() {
-		 
-	   }
-
 	   
 		@Test
 		public void addUserTest() {
@@ -67,9 +62,49 @@ class UserRegistrationServiceImplTest {
 		     List<UserRegistration> retrievedUsers = userService.getAllUser();
 		     assertEquals(users.size(), retrievedUsers.size());
 		     assertEquals(users, retrievedUsers);
-		    			
-		    	
-		    }
+		    			  }
 		 
+		 @Test
+		    public void testCreateNewUser_EmailExists() {
+			 UserRegistration user1=new UserRegistration("sidhu","pk","sidhu@gmail.com","tw535t");
+			 when(userRepoMock.existsByUserEmail("sidhu@gmail.com")).thenReturn(true);
+			 assertThrows(IllegalArgumentException.class, () -> userService.CreateNewUser(user1));
+			  verify(userRepoMock, times(1)).existsByUserEmail("sidhu@gmail.com");
+			  verify(passwordEncoder, never()).encode(any());
+			  verify(userRepoMock, never()).save(any());
+			 
+			 
+			}
+		 
+		 @Test
+		    public void testUpdateUser() {
+			 UserRegistration user1=new UserRegistration("sidhu","pk","sidhu@gmail.com","tw535t");
+			 when(passwordEncoder.encode("tw535t")).thenReturn("encodedPassword123");
+			 when(userRepoMock.save(user1)).thenReturn(user1);
+			 UserRegistration result = userService.updateUser(user1);
+			 verify(passwordEncoder, times(1)).encode("tw535t");
+		     verify(userRepoMock, times(1)).save(user1);
+			 
+			  }
+		 
+		  @Test
+		    public void testEmailExists() {
+			  String userEmail = "test@example.com";
+			  when(userRepoMock.existsByUserEmail(userEmail)).thenReturn(true);
+			  boolean result = userService.emailExists(userEmail);
+			  assertTrue(result);
+			  verify(userRepoMock, times(1)).existsByUserEmail(userEmail);
+		  }
+				 
+		  @Test
+		    public void testGetUserByEmail() {
+			  String userEmail = "test@example.com";
+			  UserRegistration expectedUser = new UserRegistration();
+			  expectedUser.setUserEmail(userEmail);
+			  when(userRepoMock.findByUserEmail(userEmail)).thenReturn(expectedUser);
+			  UserRegistration actualUser = userService.getUserByEmail(userEmail);
+			  assertEquals(expectedUser, actualUser);
+		  }
+		  
 
 }

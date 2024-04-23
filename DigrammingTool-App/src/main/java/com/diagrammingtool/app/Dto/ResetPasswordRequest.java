@@ -1,4 +1,4 @@
-package com.diagrammingtool.app.Dto;
+package com.diagrammingtool.app.dto;
 
 
 public class ResetPasswordRequest {

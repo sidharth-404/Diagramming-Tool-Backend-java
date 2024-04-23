@@ -1,131 +1,63 @@
 package com.diagrammingtool.app.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 import com.diagrammingtool.app.model.CanvasImage;
+import com.diagrammingtool.app.model.UserRegistration;
 import com.diagrammingtool.app.repository.CanvasImageRepository;
-import com.diagrammingtool.app.service.CanvasImageService;
 
 public class CanvasImageServiceTest {
 
-    @Mock
-    private CanvasImageRepository canvasImageRepository;
-
-    @InjectMocks
     private CanvasImageService canvasImageService;
+    private CanvasImageRepository canvasImageRepository;
 
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
+        canvasImageRepository = mock(CanvasImageRepository.class);
+        canvasImageService = new CanvasImageService();
+        canvasImageService.repo = canvasImageRepository;
     }
 
     @Test
     public void testSaveCanvasImage() {
-        // Mock data
-        CanvasImage canvasImage = new CanvasImage();
-        canvasImage.setId(1L);
-        canvasImage.setImageData("mockedImageData".getBytes()); // Convert to byte[]
+        // Arrange
+        CanvasImage canvasImageToSave = new CanvasImage();
+        CanvasImage savedCanvasImage = new CanvasImage();
+        when(canvasImageRepository.save(canvasImageToSave)).thenReturn(savedCanvasImage);
 
-        // Mock repository behavior
-        when(canvasImageRepository.save(canvasImage)).thenReturn(canvasImage);
+        // Act
+        CanvasImage result = canvasImageService.saveCanvasImage(canvasImageToSave);
 
-        // Call the service method
-        CanvasImage savedCanvasImage = canvasImageService.saveCanvasImage(canvasImage);
-
-        // Verify
-        assertThat(savedCanvasImage).isNotNull();
-        assertThat(savedCanvasImage.getId()).isEqualTo(1L);
-        assertThat(savedCanvasImage.getImageData()).isEqualTo("mockedImageData".getBytes()); // Convert to byte[]
+        // Assert
+        assertEquals(savedCanvasImage, result);
+        verify(canvasImageRepository, times(1)).save(canvasImageToSave);
     }
 
     @Test
-    public void testGetCanvasImagesByUserId() {
-        // Mock data
-        Long userId = 1L;
-        List<CanvasImage> mockedCanvasImages = new ArrayList<>();
-        mockedCanvasImages.add(new CanvasImage());
-        mockedCanvasImages.add(new CanvasImage());
+    public void testGetFileName() {
+   
+    	UserRegistration userWithId=new UserRegistration();
+        
+        CanvasImage canvasImage1 = new CanvasImage();
+        userWithId.setUserId(1L);
+      canvasImage1.setUser(userWithId);
+        CanvasImage canvasImage2 = new CanvasImage();
+        canvasImage2.setUser(new UserRegistration("sidharth","pk","sidharth@gmail.com","Sidhu@25"));
+        List<CanvasImage> dummyData = new ArrayList<>();
+        dummyData.add(canvasImage1);
+        dummyData.add(canvasImage2);
+        when(canvasImageRepository.findAll()).thenReturn(dummyData);
 
-        // Mock repository behavior
-        when(canvasImageRepository.findByUserId(userId)).thenReturn(mockedCanvasImages);
+        List<CanvasImage> result = canvasImageService.getFileName(1L);
 
-        // Call the service method
-        List<CanvasImage> canvasImages = canvasImageService.getCanvasImagesByUserId(userId);
-
-        // Verify
-        assertThat(canvasImages).isNotNull();
-        assertThat(canvasImages.size()).isEqualTo(2);
-    }
-
-    @Test
-    public void testGetAllDiagrams() {
-        // Mock data
-        List<CanvasImage> mockedCanvasImages = new ArrayList<>();
-        mockedCanvasImages.add(new CanvasImage());
-        mockedCanvasImages.add(new CanvasImage());
-
-        // Mock repository behavior
-        when(canvasImageRepository.findAll()).thenReturn(mockedCanvasImages);
-
-        // Call the service method
-        List<CanvasImage> canvasImages = canvasImageService.getAllDiagrams();
-
-        // Verify
-        assertThat(canvasImages).isNotNull();
-        assertThat(canvasImages.size()).isEqualTo(2);
-    }
-
-    @Test
-    public void testUpdateCanvasImage() {
-        // Mock data
-        Long id = 1L;
-        CanvasImage existingCanvasImage = new CanvasImage();
-        existingCanvasImage.setId(id);
-        existingCanvasImage.setImageData("existingImageData".getBytes()); // Convert to byte[]
-
-        CanvasImage updatedCanvasImage = new CanvasImage();
-        updatedCanvasImage.setId(id);
-        updatedCanvasImage.setImageData("updatedImageData".getBytes()); // Convert to byte[]
-
-        // Mock repository behavior
-        when(canvasImageRepository.findById(id)).thenReturn(Optional.of(existingCanvasImage));
-        when(canvasImageRepository.save(existingCanvasImage)).thenReturn(updatedCanvasImage);
-
-        // Call the service method
-        CanvasImage result = canvasImageService.updateCanvasImage(id, updatedCanvasImage);
-
-        // Verify
-        assertThat(result).isNotNull();
-        assertThat(result.getId()).isEqualTo(id);
-        assertThat(result.getImageData()).isEqualTo("updatedImageData".getBytes()); // Convert to byte[]
-    }
-
-    @Test
-    public void testUpdateCanvasImageNotFound() {
-        // Mock data
-        Long id = 1L;
-        CanvasImage updatedCanvasImage = new CanvasImage();
-        updatedCanvasImage.setId(id);
-        updatedCanvasImage.setImageData("updatedImageData".getBytes()); // Convert to byte[]
-
-        // Mock repository behavior (return empty Optional)
-        when(canvasImageRepository.findById(id)).thenReturn(Optional.empty());
-
-        // Call the service method and expect an exception
-        assertThrows(RuntimeException.class, () -> {
-            canvasImageService.updateCanvasImage(id, updatedCanvasImage);
-        });
+        assertEquals(1, result.size());
+        assertEquals(canvasImage1, result.get(0));
     }
 }

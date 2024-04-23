@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpStatus;
 import com.diagrammingtool.app.OtpService.OtpService;
-import com.diagrammingtool.app.Dto.ResetPasswordRequest;
+import com.diagrammingtool.app.dto.ResetPasswordRequest;
 import com.diagrammingtool.app.model.UserRegistration;
 import com.diagrammingtool.app.service.UserRegistrationServiceImpl;
 import com.diagrammingtool.app.util.JwtUtil;

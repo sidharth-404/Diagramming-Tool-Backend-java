@@ -21,7 +21,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import com.diagrammingtool.app.service.UserDetailsServiceImpl;
 
 
 @Configuration
@@ -29,9 +28,7 @@ import com.diagrammingtool.app.service.UserDetailsServiceImpl;
 //@EnableMethodSecurity
 public class SecurityConfig  {
 	
-	  @Autowired
-	    private UserDetailsServiceImpl userDetailsService;
-	
+	 
 
 	   @Bean
 	    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
@@ -51,14 +48,7 @@ public class SecurityConfig  {
 	   }
 	
 	
-	   @Bean
-	    public AuthenticationProvider authenticationProvider() {
-	        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-	        authenticationProvider.setUserDetailsService(userDetailsService);
-	        authenticationProvider.setPasswordEncoder(passwordEncoder());
-	        return authenticationProvider;
-	    }
-	
+
 	@Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

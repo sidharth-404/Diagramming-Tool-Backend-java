@@ -1,22 +1,42 @@
 package com.diagrammingtool.app.model;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+
 
 @Entity
-@Table(name = "canvas_images")
 public class CanvasImage {
+	
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Lob
-    @Column(name = "image_data", nullable = false)
-    private byte[] imageData;
-
-    @ManyToOne
+	private Long id;
+	private String imageName;
+	private String imageJson;
+	
+	@Lob
+	private byte[] imageByte;
+	@ManyToOne
     @JoinColumn(name = "userId", nullable = false)
     private UserRegistration user;
+	
+	public CanvasImage() {
+		
+	}
+
+	public CanvasImage(Long id, String imageName, String imageJson, byte[] imageByte, UserRegistration user) {
+		super();
+		this.id = id;
+		this.imageName = imageName;
+		this.imageJson = imageJson;
+		this.imageByte = imageByte;
+		this.user = user;
+	}
 
 	public Long getId() {
 		return id;
@@ -26,12 +46,28 @@ public class CanvasImage {
 		this.id = id;
 	}
 
-	public byte[] getImageData() {
-		return imageData;
+	public String getImageName() {
+		return imageName;
 	}
 
-	public void setImageData(byte[] imageData) {
-		this.imageData = imageData;
+	public void setImageName(String imageName) {
+		this.imageName = imageName;
+	}
+
+	public String getImageJson() {
+		return imageJson;
+	}
+
+	public void setImageJson(String imageJson) {
+		this.imageJson = imageJson;
+	}
+
+	public byte[] getImageByte() {
+		return imageByte;
+	}
+
+	public void setImageByte(byte[] imageByte) {
+		this.imageByte = imageByte;
 	}
 
 	public UserRegistration getUser() {
@@ -41,17 +77,8 @@ public class CanvasImage {
 	public void setUser(UserRegistration user) {
 		this.user = user;
 	}
-
-	public CanvasImage(Long id, byte[] imageData, UserRegistration user) {
-		super();
-		this.id = id;
-		this.imageData = imageData;
-		this.user = user;
-	}
-
-	public CanvasImage() {
-		super();
-	}
-
-    
+	
+	
+	
 }
+	

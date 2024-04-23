@@ -15,6 +15,8 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
 	private UserRegistrationRepository userRepo;
     @Autowired
     PasswordEncoder passwordEncoder;
+	
+
 	@Override
 	public UserRegistration CreateNewUser(UserRegistration user) {
 		 if (emailExists(user.getUserEmail())) {
@@ -42,7 +44,7 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
 	        return userRepo.save(user);
 	    }
 	
-	 private boolean emailExists(String email) {
+	 public boolean emailExists(String email) {
 	        return userRepo.existsByUserEmail(email);
 	    }
 	 
