@@ -33,7 +33,7 @@ public class UserLoginController {
 	private JwtUtil jwtUtil;
 	
 	 @PostMapping("/login")
-    public ResponseEntity<?> UserRegistration(@RequestBody UserLogin userLogin) {
+    public ResponseEntity<?> userRegistration(@RequestBody UserLogin userLogin) {
     
     		try {
                 if (userLogin.getUserEmail().isEmpty() || userLogin.getPassword().isEmpty()) {

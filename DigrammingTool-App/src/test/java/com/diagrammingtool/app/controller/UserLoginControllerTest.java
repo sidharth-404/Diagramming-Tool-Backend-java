@@ -44,7 +44,7 @@ public class UserLoginControllerTest {
         String jwtToken = "mockJwtToken";
         doNothing().when(userLoginService).loginUser("test@example.com", "password");
         when(jwtUtil.generateToken("test@example.com")).thenReturn(jwtToken);
-        ResponseEntity<?> response = userLoginController.UserRegistration(userLogin);
+        ResponseEntity<?> response = userLoginController.userRegistration(userLogin);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(jwtToken, response.getBody());
     }
@@ -56,7 +56,7 @@ public class UserLoginControllerTest {
         userLogin.setUserEmail("test@example.com");
         userLogin.setPassword("password");
         doThrow(new IllegalArgumentException("user not found")).when(userLoginService).loginUser("test@example.com", "password");
-        ResponseEntity<?> response = userLoginController.UserRegistration(userLogin);
+        ResponseEntity<?> response = userLoginController.userRegistration(userLogin);
 
         // Verify
         assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
@@ -69,7 +69,7 @@ public class UserLoginControllerTest {
         userLogin.setUserEmail("test@example.com");
         userLogin.setPassword("password");
         doThrow(new IllegalArgumentException("invalid password")).when(userLoginService).loginUser("test@example.com", "password");
-        ResponseEntity<?> response = userLoginController.UserRegistration(userLogin);
+        ResponseEntity<?> response = userLoginController.userRegistration(userLogin);
         assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
         assertEquals("invalid password", response.getBody());
     }

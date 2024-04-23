@@ -39,7 +39,7 @@ public class CanvasImageControllerTest {
 
         when(canvasImageService.saveCanvasImage(any(CanvasImage.class))).thenReturn(canvasImage);
 
-        ResponseEntity<CanvasImage> responseEntity = canvasImageController.SaveImage(canvasImage);
+        ResponseEntity<CanvasImage> responseEntity = canvasImageController.saveImage(canvasImage);
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
         assertEquals(canvasImage, responseEntity.getBody());

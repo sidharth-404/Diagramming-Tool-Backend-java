@@ -26,7 +26,7 @@ public class CanvasImageController {
 	private CanvasImageService service;
 	
 	@PostMapping("/saveDummyImage")
-	public ResponseEntity<CanvasImage> SaveImage(@RequestBody CanvasImage canvasImageDummy){
+	public ResponseEntity<CanvasImage> saveImage(@RequestBody CanvasImage canvasImageDummy){
 		CanvasImage dummy=service.saveCanvasImage(canvasImageDummy);
 		return new ResponseEntity<>(dummy,HttpStatus.CREATED);
 	}
