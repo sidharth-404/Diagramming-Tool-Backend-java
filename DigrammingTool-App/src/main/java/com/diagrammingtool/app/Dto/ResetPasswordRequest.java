@@ -35,7 +35,7 @@ public class ResetPasswordRequest {
 
 
 	public ResetPasswordRequest() {
-		super();
+	
 	}
 
 	
