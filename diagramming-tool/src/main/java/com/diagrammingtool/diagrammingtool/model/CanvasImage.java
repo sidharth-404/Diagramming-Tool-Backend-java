@@ -1,13 +1,13 @@
-package com.diagrammingtool.diagrammingtool.model;
+package com.diagrammingtool.app.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToOne;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+
 
 @Entity
 public class CanvasImage {
@@ -17,11 +17,9 @@ public class CanvasImage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String imageName;
-	@Column(columnDefinition = "TEXT")
 	private String imageJson;
 	
 	@Lob
-	@Column(columnDefinition = "BLOB")
 	private byte[] imageByte;
 	@ManyToOne
     @JoinColumn(name = "userId", nullable = false)
@@ -79,6 +77,8 @@ public class CanvasImage {
 	public void setUser(UserRegistration user) {
 		this.user = user;
 	}
-}
 	
+	
+	
+}
 	

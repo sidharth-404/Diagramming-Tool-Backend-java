@@ -1,4 +1,4 @@
-package com.diagrammingtool.diagrammingtool.service;
+package com.diagrammingtool.app.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,33 +6,32 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.diagrammingtool.diagrammingtool.model.CanvasImage;
-import com.diagrammingtool.diagrammingtool.repository.CanvasImageRepository;
+import com.diagrammingtool.app.model.CanvasImage;
+import com.diagrammingtool.app.repository.CanvasImageRepository;
 
 @Service
 public class CanvasImageService {
-	
-	@Autowired
-	public CanvasImageRepository canvasRepository;
-	
-	
-	 public CanvasImage saveCanvasImage(CanvasImage canvasImage) {
-	      return canvasRepository.save(canvasImage);
-	  }
-	  
-	  public List<CanvasImage> getFileName(Long UserId){
-		  List<CanvasImage> images=canvasRepository.findAll();
-		  List<CanvasImage> fileName=new ArrayList<>();
-		  for(CanvasImage c : images) {
-			  if(c.getUser().getUserId()==UserId) {
-				  
-				  fileName.add(c);
-				  
-			  }
-			 
+  @Autowired 
+  CanvasImageRepository repo;
+  
+  public CanvasImage saveCanvasImage(CanvasImage canvasImage) {
+      return repo.save(canvasImage);
+  }
+  
+  public List<CanvasImage> getFileName(Long UserId){
+	  List<CanvasImage> dummy=repo.findAll();
+	  List<CanvasImage> fileName=new ArrayList<>();
+	  for(CanvasImage c : dummy) {
+		  if(c.getUser().getUserId()==UserId) {
+			  
+			  fileName.add(c);
+			  
 		  }
-		  return fileName;
-		  
+		 
 	  }
+	  return fileName;
+	  
+  }
+  
 
 }
